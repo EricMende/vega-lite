@@ -27,7 +27,7 @@ To create an error bar, set `mark` to `"errorbar"`.
 
 <!-- prettier-ignore -->
 - TOC
-{:toc}
+  {:toc}
 
 {:#properties}
 
@@ -83,7 +83,7 @@ Error bar with asymmetric error values:
 
 <div class="vl-example" data-name="layer_point_errorbar_2d_horizontal_pre_aggregated_error_asymmetric"></div>
 
-**Note** in this case, `extent` is not necessary and will be ignored.
+**Note** if error is pre-aggregated with asymmetric error values one of `x/yError` and `x/yError2` has to be positive value and other has to be negative value
 
 ## Dimension & Orientation
 

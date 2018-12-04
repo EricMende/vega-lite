@@ -27,7 +27,7 @@ To create an error band, set `mark` to `"errorband"`.
 
 <!-- prettier-ignore -->
 - TOC
-{:toc}
+  {:toc}
 
 {:#properties}
 
@@ -74,8 +74,6 @@ If the data is already pre-aggregated with low and high values of the error band
 2. **Data is aggregated with center and error value(s)**
 
 If the data is already pre-aggregated with center and error values of the error band, you can use `x/y`, `x/yError`, and `x/yError2` as defined in [Error Bar](errorbar.html#pre-aggregated-usage)
-
-**Note** in this case, `extent` is not necessary and will be ignored.
 
 ## Dimension
 
