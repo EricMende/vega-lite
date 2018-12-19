@@ -1,8 +1,16 @@
 import {isBoolean, isString} from 'vega-util';
 import {CompositeMark, CompositeMarkDef} from '.';
 import {Channel} from '../channel';
-import {Encoding, reduce} from '../encoding';
-import {Field, FieldDef, FieldDefWithoutScale, isContinuous, isFieldDef, PositionFieldDef} from '../fielddef';
+import {Encoding, fieldDefs, reduce} from '../encoding';
+import {
+  Field,
+  FieldDef,
+  FieldDefWithoutScale,
+  isContinuous,
+  isFieldDef,
+  PositionFieldDef,
+  TextFieldDef
+} from '../fielddef';
 import * as log from '../log';
 import {ColorMixins, GenericMarkDef, isMarkDef, Mark, MarkConfig, MarkDef} from '../mark';
 import {GenericUnitSpec, NormalizedUnitSpec} from '../spec';
@@ -22,6 +30,31 @@ export type GenericCompositeMarkDef<T> = GenericMarkDef<T> &
      */
     clip?: boolean;
   };
+
+export interface CompositeMarkTooltipSummary {
+  fieldPrefix: string;
+  titlePrefix: string;
+}
+
+export function getCompositeMarkTooltip(
+  tooltipSummaryMap: CompositeMarkTooltipSummary[],
+  continuousAxisChannelDef: PositionFieldDef<string>,
+  encodingWithoutContinuousAxis: Encoding<string>
+): TextFieldDef<string>[] {
+  const fiveSummaryTooltip: TextFieldDef<string>[] = tooltipSummaryMap.map(
+    ({fieldPrefix, titlePrefix}): TextFieldDef<string> => ({
+      field: fieldPrefix + '_' + continuousAxisChannelDef.field,
+      type: continuousAxisChannelDef.type,
+      title: titlePrefix + ' of ' + continuousAxisChannelDef.field
+    })
+  );
+
+  return [
+    ...fiveSummaryTooltip,
+    // need to cast because TextFieldDef support fewer types of bin
+    ...(fieldDefs(encodingWithoutContinuousAxis) as TextFieldDef<string>[])
+  ];
+}
 
 export function makeCompositeAggregatePartFactory<P extends PartsMixins<any>>(
   compositeMarkDef: GenericCompositeMarkDef<any> & P,

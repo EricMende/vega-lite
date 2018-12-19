@@ -12,8 +12,10 @@ import {Orient} from '../vega.schema';
 import {
   compositeMarkContinuousAxis,
   compositeMarkOrient,
+  CompositeMarkTooltipSummary,
   filterUnsupportedChannels,
   GenericCompositeMarkDef,
+  getCompositeMarkTooltip,
   makeCompositeAggregatePartFactory,
   partLayerMixins,
   PartsMixins
@@ -130,8 +132,11 @@ export function normalizeBoxPlot(
     orient: tickOrient
   };
 
-  const tooltip: TextFieldDef<string>[] = getTooltip(isMinMax, continuousAxisChannelDef, encodingWithoutContinuousAxis);
-  const tooltipEncoding: Encoding<string> = {tooltip};
+  const tooltipEncoding: Encoding<string> = boxPlotTooltipEncoding(
+    isMinMax,
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
+  );
 
   // TODO: support hiding certain mark parts
   const boxLayer: NormalizedUnitSpec[] = [
@@ -196,30 +201,26 @@ export function normalizeBoxPlot(
   };
 }
 
-function getTooltip(
+function boxPlotTooltipEncoding(
   isMinMax: boolean,
   continuousAxisChannelDef: PositionFieldDef<string>,
   encodingWithoutContinuousAxis: Encoding<string>
-): TextFieldDef<string>[] {
-  const fiveSummaryTooltip: TextFieldDef<string>[] = [
+): Encoding<string> {
+  const tooltopSummaryMap: CompositeMarkTooltipSummary[] = [
     {fieldPrefix: 'upper_whisker', titlePrefix: isMinMax ? 'Max' : 'Upper Whisker'},
     {fieldPrefix: 'upper_box', titlePrefix: 'Q3'},
     {fieldPrefix: 'mid_box', titlePrefix: 'Median'},
     {fieldPrefix: 'lower_box', titlePrefix: 'Q1'},
     {fieldPrefix: 'lower_whisker', titlePrefix: isMinMax ? 'Min' : 'Lower Whisker'}
-  ].map(
-    ({fieldPrefix, titlePrefix}): TextFieldDef<string> => ({
-      field: fieldPrefix + '_' + continuousAxisChannelDef.field,
-      type: continuousAxisChannelDef.type,
-      title: titlePrefix + ' of ' + continuousAxisChannelDef.field
-    })
+  ];
+
+  const tooltip: TextFieldDef<string>[] = getCompositeMarkTooltip(
+    tooltopSummaryMap,
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
   );
 
-  return [
-    ...fiveSummaryTooltip,
-    // need to cast because TextFieldDef support fewer types of bin
-    ...(fieldDefs(encodingWithoutContinuousAxis) as TextFieldDef<string>[])
-  ];
+  return {tooltip};
 }
 
 function boxParamsQuartiles(continousAxisField: string): AggregatedFieldDef[] {

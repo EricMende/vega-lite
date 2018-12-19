@@ -6,7 +6,7 @@ import {GenericUnitSpec, NormalizedLayerSpec} from '../spec';
 import {Flag, keys} from '../util';
 import {Interpolate, Orient} from '../vega.schema';
 import {GenericCompositeMarkDef, makeCompositeAggregatePartFactory, PartsMixins} from './common';
-import {ErrorBarCenter, ErrorBarExtent, errorBarParams} from './errorbar';
+import {ErrorBarCenter, ErrorBarExtent, errorBarParams, errorBarTooltipEncoding} from './errorbar';
 
 export const ERRORBAND: 'errorband' = 'errorband';
 export type ErrorBand = typeof ERRORBAND;
@@ -132,13 +132,18 @@ export function normalizeErrorBand(
     log.warn(log.message.errorBand1DNotSupport('tension'));
   }
 
+  const tooltipEncoding: Encoding<string> = errorBarTooltipEncoding(
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
+  );
+
   return {
     ...outerSpec,
     transform,
     layer: [
-      ...makeErrorBandPart('band', bandMark, 'lower', 'upper'),
-      ...makeErrorBandPart('borders', bordersMark, 'lower'),
-      ...makeErrorBandPart('borders', bordersMark, 'upper')
+      ...makeErrorBandPart('band', bandMark, 'lower', 'upper', tooltipEncoding),
+      ...makeErrorBandPart('borders', bordersMark, 'lower', null, tooltipEncoding),
+      ...makeErrorBandPart('borders', bordersMark, 'upper', null, tooltipEncoding)
     ]
   };
 }

@@ -1,8 +1,8 @@
 import {Channel} from '../channel';
 import {Config} from '../config';
 import {Data} from '../data';
-import {Encoding, extractTransformsFromEncoding} from '../encoding';
-import {Field, FieldDef, isContinuous, isFieldDef, PositionFieldDef} from '../fielddef';
+import {Encoding, extractTransformsFromEncoding, fieldDefs} from '../encoding';
+import {Field, FieldDef, isContinuous, isFieldDef, PositionFieldDef, TextFieldDef} from '../fielddef';
 import * as log from '../log';
 import {isMarkDef, MarkDef} from '../mark';
 import {GenericUnitSpec, NormalizedLayerSpec} from '../spec';
@@ -13,8 +13,10 @@ import {Orient} from '../vega.schema';
 import {
   compositeMarkContinuousAxis,
   compositeMarkOrient,
+  CompositeMarkTooltipSummary,
   filterUnsupportedChannels,
   GenericCompositeMarkDef,
+  getCompositeMarkTooltip,
   makeCompositeAggregatePartFactory,
   PartsMixins
 } from './common';
@@ -102,16 +104,38 @@ export function normalizeErrorBar(
   );
 
   const tick: MarkDef = {type: 'tick', orient: ticksOrient};
+  const tooltipEncoding: Encoding<string> = errorBarTooltipEncoding(
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
+  );
 
   return {
     ...outerSpec,
     transform,
     layer: [
-      ...makeErrorBarPart('ticks', tick, 'lower'),
-      ...makeErrorBarPart('ticks', tick, 'upper'),
-      ...makeErrorBarPart('rule', 'rule', 'lower', 'upper')
+      ...makeErrorBarPart('ticks', tick, 'lower', null, tooltipEncoding),
+      ...makeErrorBarPart('ticks', tick, 'upper', null, tooltipEncoding),
+      ...makeErrorBarPart('rule', 'rule', 'lower', 'upper', tooltipEncoding)
     ]
   };
+}
+
+export function errorBarTooltipEncoding(
+  continuousAxisChannelDef: PositionFieldDef<string>,
+  encodingWithoutContinuousAxis: Encoding<string>
+): Encoding<string> {
+  const tooltopSummaryMap: CompositeMarkTooltipSummary[] = [
+    {fieldPrefix: 'upper', titlePrefix: 'Error upper bound'},
+    {fieldPrefix: 'lower', titlePrefix: 'Error lower bound'}
+  ];
+
+  const tooltip: TextFieldDef<string>[] = getCompositeMarkTooltip(
+    tooltopSummaryMap,
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
+  );
+
+  return {tooltip};
 }
 
 function errorBarOrientAndInputType(
