@@ -46,19 +46,19 @@ fi
 # Commit examples if outdated
 
 # Note: we need to add all files first so that new files are included in `git diff --cached` too.
-git add -v ./examples/compiled/vega_version './examples/compiled/*.vg.json' './examples/compiled/*.svg' './examples/specs/normalized/*.vl.json'
+git add ./examples/compiled/vega_version './examples/compiled/*.vg.json' './examples/compiled/*.svg' './examples/specs/normalized/*.vl.json'
 
 if [[ $TRAVIS_BRANCH == 'master' ]]; then
   # Don't diff SVG as floating point calculation is not always consistent
-  if ! git diff --cached --word-diff=color --exit-code HEAD -- ./examples/compiled/*.vg.json ./examples/specs/normalized/*.vl.json
+  if ! git diff --cached --word-diff=color --exit-code HEAD -- './examples/compiled/*.vg.json' './examples/specs/normalized/*.vl.json'
   then
     echo "Outdated examples."
     exit 1
   fi
 else
-  if ! git diff --cached --word-diff=color --exit-code HEAD -- ./examples/compiled/vega_version ./examples/compiled/*.vg.json ./examples/compiled/*.svg ./examples/specs/normalized/*.vl.json
+  if ! git diff --cached --word-diff=color --exit-code HEAD -- ./examples/compiled/vega_version './examples/compiled/*.vg.json' './examples/compiled/*.svg' './examples/specs/normalized/*.vl.json'
   then
-    git commit -v -m "[Travis] Update examples (build: $TRAVIS_BUILD_NUMBER)"
+    git commit -m "[Travis] Update examples (build: $TRAVIS_BUILD_NUMBER)"
   fi
 fi
 
