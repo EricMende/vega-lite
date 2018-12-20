@@ -45,7 +45,20 @@
               "scale": {"zero": false}
             },
             "x2": {"field": "upper_upper_yield", "type": "quantitative"},
-            "y": {"field": "variety", "type": "ordinal"}
+            "y": {"field": "variety", "type": "ordinal"},
+            "tooltip": [
+              {
+                "field": "upper_upper_yield",
+                "type": "quantitative",
+                "title": "Upper error of upper_yield"
+              },
+              {
+                "field": "lower_upper_yield",
+                "type": "quantitative",
+                "title": "Lower error of upper_yield"
+              },
+              {"field": "variety", "type": "ordinal"}
+            ]
           }
         }
       ]
