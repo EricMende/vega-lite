@@ -6,7 +6,7 @@ import {GenericUnitSpec, NormalizedLayerSpec} from '../spec';
 import {Flag, keys} from '../util';
 import {Interpolate, Orient} from '../vega.schema';
 import {GenericCompositeMarkDef, makeCompositeAggregatePartFactory, PartsMixins} from './common';
-import {ErrorBarCenter, ErrorBarExtent, errorBarParams, errorBarTooltipEncoding} from './errorbar';
+import {ErrorBarCenter, ErrorBarExtent, errorBarParams} from './errorbar';
 
 export const ERRORBAND: 'errorband' = 'errorband';
 export type ErrorBand = typeof ERRORBAND;

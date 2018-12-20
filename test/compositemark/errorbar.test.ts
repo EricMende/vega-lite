@@ -62,8 +62,8 @@ describe('normalizeErrorBar with raw data input', () => {
             y2: {field: 'upper_people', type: 'quantitative'},
             x: {field: 'age', type: 'ordinal'},
             tooltip: [
-              {field: 'upper_people', title: 'Error upper bound of people', type: 'quantitative'},
-              {field: 'lower_people', title: 'Error lower bound of people', type: 'quantitative'},
+              {field: 'upper_people', title: 'Upper error of people', type: 'quantitative'},
+              {field: 'lower_people', title: 'Lower error of people', type: 'quantitative'},
               {field: 'age', type: 'ordinal'}
             ]
           }
@@ -668,8 +668,8 @@ describe('normalizeErrorBar with aggregated upper and lower bound input', () => 
             y2: {field: 'upper_people', type: 'quantitative'},
             x: {field: 'age', type: 'ordinal'},
             tooltip: [
-              {field: 'upper_people', title: 'Error upper bound of people', type: 'quantitative'},
-              {field: 'lower_people', title: 'Error lower bound of people', type: 'quantitative'},
+              {field: 'upper_people', title: 'Upper error of people', type: 'quantitative'},
+              {field: 'lower_people', title: 'Lower error of people', type: 'quantitative'},
               {field: 'age', type: 'ordinal'}
             ]
           }
@@ -895,8 +895,8 @@ describe('normalizeErrorBar with aggregated error input', () => {
             y2: {field: 'upper_people', type: 'quantitative'},
             x: {field: 'age', type: 'ordinal'},
             tooltip: [
-              {field: 'upper_people', title: 'Error upper bound of people', type: 'quantitative'},
-              {field: 'lower_people', title: 'Error lower bound of people', type: 'quantitative'},
+              {field: 'upper_people', title: 'Upper error of people', type: 'quantitative'},
+              {field: 'lower_people', title: 'Lower error of people', type: 'quantitative'},
               {field: 'age', type: 'ordinal'}
             ]
           }
