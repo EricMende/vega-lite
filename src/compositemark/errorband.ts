@@ -97,7 +97,8 @@ export function normalizeErrorBand(
     continuousAxis,
     encodingWithoutContinuousAxis,
     markDef,
-    outerSpec
+    outerSpec,
+    tooltipEncoding
   } = errorBarParams(spec, ERRORBAND, config);
 
   const makeErrorBandPart = makeCompositeAggregatePartFactory<ErrorBandPartsMixins>(
@@ -131,11 +132,6 @@ export function normalizeErrorBand(
   } else if (markDef.tension) {
     log.warn(log.message.errorBand1DNotSupport('tension'));
   }
-
-  const tooltipEncoding: Encoding<string> = errorBarTooltipEncoding(
-    continuousAxisChannelDef,
-    encodingWithoutContinuousAxis
-  );
 
   return {
     ...outerSpec,

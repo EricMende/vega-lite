@@ -92,7 +92,8 @@ export function normalizeErrorBar(
     encodingWithoutContinuousAxis,
     ticksOrient,
     markDef,
-    outerSpec
+    outerSpec,
+    tooltipEncoding
   } = errorBarParams(spec, ERRORBAR, config);
 
   const makeErrorBarPart = makeCompositeAggregatePartFactory<ErrorBarPartsMixins>(
@@ -104,10 +105,6 @@ export function normalizeErrorBar(
   );
 
   const tick: MarkDef = {type: 'tick', orient: ticksOrient};
-  const tooltipEncoding: Encoding<string> = errorBarTooltipEncoding(
-    continuousAxisChannelDef,
-    encodingWithoutContinuousAxis
-  );
 
   return {
     ...outerSpec,
@@ -118,24 +115,6 @@ export function normalizeErrorBar(
       ...makeErrorBarPart('rule', 'rule', 'lower', 'upper', tooltipEncoding)
     ]
   };
-}
-
-export function errorBarTooltipEncoding(
-  continuousAxisChannelDef: PositionFieldDef<string>,
-  encodingWithoutContinuousAxis: Encoding<string>
-): Encoding<string> {
-  const tooltopSummaryMap: CompositeMarkTooltipSummary[] = [
-    {fieldPrefix: 'upper', titlePrefix: 'Error upper bound'},
-    {fieldPrefix: 'lower', titlePrefix: 'Error lower bound'}
-  ];
-
-  const tooltip: TextFieldDef<string>[] = getCompositeMarkTooltip(
-    tooltopSummaryMap,
-    continuousAxisChannelDef,
-    encodingWithoutContinuousAxis
-  );
-
-  return {tooltip};
 }
 
 function errorBarOrientAndInputType(
@@ -299,6 +278,7 @@ export function errorBarParams<
     width?: number;
     height?: number;
   };
+  tooltipEncoding: Encoding<string>;
 } {
   spec = filterUnsupportedChannels<M, MD>(spec, errorBarSupportedChannels, compositeMark);
 
@@ -350,6 +330,11 @@ export function errorBarParams<
   const aggregate: AggregatedFieldDef[] = [...oldAggregate, ...errorBarSpecificAggregate];
   const groupby: string[] = inputType !== 'raw' ? [] : oldGroupBy;
 
+  const tooltipEncoding: Encoding<string> = errorBarTooltipEncoding(
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
+  );
+
   return {
     transform: [
       ...(outerSpec.transform || []),
@@ -364,8 +349,27 @@ export function errorBarParams<
     encodingWithoutContinuousAxis,
     ticksOrient: orient === 'vertical' ? 'horizontal' : 'vertical',
     markDef,
-    outerSpec
+    outerSpec,
+    tooltipEncoding
   };
+}
+
+export function errorBarTooltipEncoding(
+  continuousAxisChannelDef: PositionFieldDef<string>,
+  encodingWithoutContinuousAxis: Encoding<string>
+): Encoding<string> {
+  const tooltopSummaryMap: CompositeMarkTooltipSummary[] = [
+    {fieldPrefix: 'upper', titlePrefix: 'Upper error'},
+    {fieldPrefix: 'lower', titlePrefix: 'Lower error'}
+  ];
+
+  const tooltip: TextFieldDef<string>[] = getCompositeMarkTooltip(
+    tooltopSummaryMap,
+    continuousAxisChannelDef,
+    encodingWithoutContinuousAxis
+  );
+
+  return {tooltip};
 }
 
 function errorBarAggregationAndCalculation<
