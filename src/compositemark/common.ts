@@ -37,11 +37,11 @@ export interface CompositeMarkTooltipSummary {
 }
 
 export function getCompositeMarkTooltip(
-  tooltipSummaryMap: CompositeMarkTooltipSummary[],
+  tooltipSummary: CompositeMarkTooltipSummary[],
   continuousAxisChannelDef: PositionFieldDef<string>,
   encodingWithoutContinuousAxis: Encoding<string>
-): TextFieldDef<string>[] {
-  const fiveSummaryTooltip: TextFieldDef<string>[] = tooltipSummaryMap.map(
+): Encoding<string> {
+  const fiveSummaryTooltip: TextFieldDef<string>[] = tooltipSummary.map(
     ({fieldPrefix, titlePrefix}): TextFieldDef<string> => ({
       field: fieldPrefix + '_' + continuousAxisChannelDef.field,
       type: continuousAxisChannelDef.type,
@@ -49,11 +49,13 @@ export function getCompositeMarkTooltip(
     })
   );
 
-  return [
-    ...fiveSummaryTooltip,
-    // need to cast because TextFieldDef support fewer types of bin
-    ...(fieldDefs(encodingWithoutContinuousAxis) as TextFieldDef<string>[])
-  ];
+  return {
+    tooltip: [
+      ...fiveSummaryTooltip,
+      // need to cast because TextFieldDef support fewer types of bin
+      ...(fieldDefs(encodingWithoutContinuousAxis) as TextFieldDef<string>[])
+    ]
+  };
 }
 
 export function makeCompositeAggregatePartFactory<P extends PartsMixins<any>>(

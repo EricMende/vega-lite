@@ -330,7 +330,12 @@ export function errorBarParams<
   const aggregate: AggregatedFieldDef[] = [...oldAggregate, ...errorBarSpecificAggregate];
   const groupby: string[] = inputType !== 'raw' ? [] : oldGroupBy;
 
-  const tooltipEncoding: Encoding<string> = errorBarTooltipEncoding(
+  const tooltopSummary: CompositeMarkTooltipSummary[] = [
+    {fieldPrefix: 'upper', titlePrefix: 'Upper error'},
+    {fieldPrefix: 'lower', titlePrefix: 'Lower error'}
+  ];
+  const tooltipEncoding: Encoding<string> = getCompositeMarkTooltip(
+    tooltopSummary,
     continuousAxisChannelDef,
     encodingWithoutContinuousAxis
   );
@@ -352,24 +357,6 @@ export function errorBarParams<
     outerSpec,
     tooltipEncoding
   };
-}
-
-export function errorBarTooltipEncoding(
-  continuousAxisChannelDef: PositionFieldDef<string>,
-  encodingWithoutContinuousAxis: Encoding<string>
-): Encoding<string> {
-  const tooltopSummaryMap: CompositeMarkTooltipSummary[] = [
-    {fieldPrefix: 'upper', titlePrefix: 'Upper error'},
-    {fieldPrefix: 'lower', titlePrefix: 'Lower error'}
-  ];
-
-  const tooltip: TextFieldDef<string>[] = getCompositeMarkTooltip(
-    tooltopSummaryMap,
-    continuousAxisChannelDef,
-    encodingWithoutContinuousAxis
-  );
-
-  return {tooltip};
 }
 
 function errorBarAggregationAndCalculation<
