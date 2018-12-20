@@ -1,7 +1,7 @@
 import {isNumber, isObject} from 'vega-util';
 import {Channel} from '../channel';
 import {Config} from '../config';
-import {Encoding, extractTransformsFromEncoding, fieldDefs} from '../encoding';
+import {Encoding, extractTransformsFromEncoding} from '../encoding';
 import {PositionFieldDef, TextFieldDef} from '../fielddef';
 import * as log from '../log';
 import {isMarkDef, MarkDef} from '../mark';

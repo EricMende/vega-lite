@@ -11,27 +11,27 @@ import {defaultConfig} from '.././../src/config';
 
 describe('normalizeErrorBar with raw data input', () => {
   it('should produce correct layered specs for mean point and vertical error bar', () => {
-    expect(
-      normalize(
-        {
-          data: {
-            url: 'data/population.json'
-          },
-          mark: 'errorbar',
-          encoding: {
-            x: {
-              field: 'age',
-              type: 'ordinal'
-            },
-            y: {
-              field: 'people',
-              type: 'quantitative'
-            }
-          }
+    const output = normalize(
+      {
+        data: {
+          url: 'data/population.json'
         },
-        defaultConfig
-      )
-    ).toEqual({
+        mark: 'errorbar',
+        encoding: {
+          x: {
+            field: 'age',
+            type: 'ordinal'
+          },
+          y: {
+            field: 'people',
+            type: 'quantitative'
+          }
+        }
+      },
+      defaultConfig
+    );
+
+    expect(output).toEqual({
       data: {url: 'data/population.json'},
       transform: [
         {
@@ -60,7 +60,12 @@ describe('normalizeErrorBar with raw data input', () => {
               title: 'people'
             },
             y2: {field: 'upper_people', type: 'quantitative'},
-            x: {field: 'age', type: 'ordinal'}
+            x: {field: 'age', type: 'ordinal'},
+            tooltip: [
+              {field: 'upper_people', title: 'Error upper bound of people', type: 'quantitative'},
+              {field: 'lower_people', title: 'Error lower bound of people', type: 'quantitative'},
+              {field: 'age', type: 'ordinal'}
+            ]
           }
         }
       ]
@@ -661,7 +666,12 @@ describe('normalizeErrorBar with aggregated upper and lower bound input', () => 
               title: 'people'
             },
             y2: {field: 'upper_people', type: 'quantitative'},
-            x: {field: 'age', type: 'ordinal'}
+            x: {field: 'age', type: 'ordinal'},
+            tooltip: [
+              {field: 'upper_people', title: 'Error upper bound of people', type: 'quantitative'},
+              {field: 'lower_people', title: 'Error lower bound of people', type: 'quantitative'},
+              {field: 'age', type: 'ordinal'}
+            ]
           }
         }
       ]
@@ -883,7 +893,12 @@ describe('normalizeErrorBar with aggregated error input', () => {
               title: 'people'
             },
             y2: {field: 'upper_people', type: 'quantitative'},
-            x: {field: 'age', type: 'ordinal'}
+            x: {field: 'age', type: 'ordinal'},
+            tooltip: [
+              {field: 'upper_people', title: 'Error upper bound of people', type: 'quantitative'},
+              {field: 'lower_people', title: 'Error lower bound of people', type: 'quantitative'},
+              {field: 'age', type: 'ordinal'}
+            ]
           }
         }
       ]

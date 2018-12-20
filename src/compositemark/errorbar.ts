@@ -1,7 +1,7 @@
 import {Channel} from '../channel';
 import {Config} from '../config';
 import {Data} from '../data';
-import {Encoding, extractTransformsFromEncoding, fieldDefs} from '../encoding';
+import {Encoding, extractTransformsFromEncoding} from '../encoding';
 import {Field, FieldDef, isContinuous, isFieldDef, PositionFieldDef, TextFieldDef} from '../fielddef';
 import * as log from '../log';
 import {isMarkDef, MarkDef} from '../mark';
